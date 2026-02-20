@@ -54,5 +54,5 @@ Rentify is a full-stack MERN application that allows users to rent cars from loc
 ### 1️⃣ Clone the repo
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/rentify.git
+git clone https://github.com/151saurabhyadav30351-bit/rentify.git
 cd rentify
