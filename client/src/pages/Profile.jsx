@@ -111,7 +111,7 @@ export default function Profile() {
       </div>
 
       {/* ================= CARD ================= */}
-      <div className="max-w-3xl bg-white border border-gray-200 rounded-2xl shadow-sm p-6 md:p-8">
+      <div className="max-w-3xl bg-white border border-gray-200 rounded-2xl shadow-sm p-4 sm:p-6 md:p-8">
         {/* Avatar Section */}
         <div className="flex flex-col sm:flex-row sm:items-center gap-6 mb-8">
           <div className="relative w-24 h-24">

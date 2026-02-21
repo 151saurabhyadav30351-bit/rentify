@@ -125,20 +125,20 @@ export default function CarDetails() {
   };
 
   return (
-    <div className="pt-24 md:pt-28 px-4 sm:px-6 max-w-7xl mx-auto">
+    <div className="pt-24 md:pt-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pb-8">
       {/* Back */}
       <Link
         to="/cars"
-        className="flex items-center gap-2 text-gray-500 hover:text-blue-900 mb-6 text-sm font-medium"
+        className="flex items-center gap-2 text-gray-500 hover:text-blue-900 mb-4 sm:mb-6 text-xs sm:text-sm font-medium"
       >
-        <ArrowLeft size={18} />
+        <ArrowLeft size={16} />
         Back to all cars
       </Link>
 
-      <div className="grid lg:grid-cols-3 gap-12">
+      <div className="block lg:grid lg:grid-cols-3 lg:gap-12 space-y-6 lg:space-y-0">
         {/* LEFT */}
-        <div className="lg:col-span-2">
-          <div className="relative bg-white rounded-3xl shadow-lg overflow-hidden">
+        <div className="w-full">
+          <div className="relative bg-white rounded-2xl sm:rounded-3xl shadow-lg overflow-hidden">
             <img
               src={
                 car.image?.trim()
@@ -146,11 +146,11 @@ export default function CarDetails() {
                   : `https://ui-avatars.com/api/?name=${car.name}&background=0F2D52&color=fff`
               }
               alt={car.name}
-              className="w-full h-[440px] object-contain bg-gray-100"
+              className="w-full h-48 sm:h-64 md:h-80 lg:h-[440px] object-contain bg-gray-100"
             />
 
             <span
-              className={`absolute top-5 left-5 text-xs font-semibold px-4 py-1.5 rounded-full shadow-sm ${
+              className={`absolute top-3 sm:top-5 left-3 sm:left-5 text-xs font-semibold px-3 sm:px-4 py-1 sm:py-1.5 rounded-full shadow-sm ${
                 isAvailable
                   ? "bg-green-100 text-green-700"
                   : "bg-red-100 text-red-600"
@@ -160,29 +160,29 @@ export default function CarDetails() {
             </span>
           </div>
 
-          <div className="mt-8">
-            <h1 className="text-4xl font-bold text-gray-900">{car.name}</h1>
+          <div className="mt-6 sm:mt-8">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">{car.name}</h1>
 
-            <div className="flex items-center gap-2 text-gray-500 mt-2 text-lg">
-              <MapPin size={20} />
+            <div className="flex items-center gap-2 text-gray-500 mt-2 text-sm sm:text-base md:text-lg">
+              <MapPin size={16} className="sm:w-5 sm:h-5" />
               <span>
                 {car.type} • {car.city}
               </span>
             </div>
 
-            <div className="flex flex-wrap gap-10 mt-8 text-base text-gray-700">
-              <span className="flex items-center gap-3">
-                <Users size={22} />
+            <div className="flex flex-wrap gap-4 sm:gap-6 md:gap-10 mt-6 sm:mt-8 text-sm sm:text-base text-gray-700">
+              <span className="flex items-center gap-2 sm:gap-3">
+                <Users size={18} className="sm:w-6 sm:h-6" />
                 {car.seats} Seats
               </span>
 
-              <span className="flex items-center gap-3">
-                <Gauge size={22} />
+              <span className="flex items-center gap-2 sm:gap-3">
+                <Gauge size={18} className="sm:w-6 sm:h-6" />
                 {car.transmission}
               </span>
 
-              <span className="flex items-center gap-3">
-                <Fuel size={22} />
+              <span className="flex items-center gap-2 sm:gap-3">
+                <Fuel size={18} className="sm:w-6 sm:h-6" />
                 {car.fuel}
               </span>
             </div>
@@ -190,25 +190,25 @@ export default function CarDetails() {
         </div>
 
         {/* RIGHT */}
-        <div className="lg:col-span-1">
-          <div className="bg-white rounded-3xl shadow-xl p-7 sticky top-28">
-            <div className="flex items-end justify-between mb-5">
-              <p className="text-4xl font-extrabold text-blue-900">
+        <div className="w-full">
+          <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl p-5 sm:p-7 lg:sticky lg:top-28">
+            <div className="flex items-end justify-between mb-4 sm:mb-5">
+              <p className="text-3xl sm:text-4xl font-extrabold text-blue-900">
                 ₹{car.price}
               </p>
-              <span className="text-sm font-semibold text-gray-500">
+              <span className="text-xs sm:text-sm font-semibold text-gray-500">
                 / day
               </span>
             </div>
 
-            <div className="space-y-5">
+            <div className="space-y-4 sm:space-y-5">
               {/* Pickup */}
               <input
                 type="date"
                 min={today}
                 value={fromDate}
                 onChange={(e) => setFromDate(e.target.value)}
-                className="w-full border border-gray-300 px-4 py-3 rounded-xl text-sm focus:ring-2 focus:ring-blue-900 outline-none"
+                className="w-full border border-gray-300 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl text-sm focus:ring-2 focus:ring-blue-900 outline-none"
               />
 
               {/* Return */}
@@ -218,12 +218,12 @@ export default function CarDetails() {
                 value={toDate}
                 disabled={!fromDate}
                 onChange={(e) => setToDate(e.target.value)}
-                className="w-full border border-gray-300 px-4 py-3 rounded-xl text-sm focus:ring-2 focus:ring-blue-900 outline-none disabled:bg-gray-100"
+                className="w-full border border-gray-300 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl text-sm focus:ring-2 focus:ring-blue-900 outline-none disabled:bg-gray-100"
               />
 
               {/* Total */}
               {isValidRange && (
-                <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-sm font-semibold text-blue-900">
+                <div className="bg-blue-50 border border-blue-100 rounded-lg sm:rounded-xl p-3 sm:p-4 text-xs sm:text-sm font-semibold text-blue-900">
                   {days} days × ₹{car.price} = ₹{total}
                 </div>
               )}
@@ -232,7 +232,7 @@ export default function CarDetails() {
               <button
                 disabled={!isValidRange || isChecking}
                 onClick={handleBooking}
-                className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white py-3.5 rounded-xl font-semibold text-base transition disabled:opacity-50"
+                className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white py-2.5 sm:py-3.5 rounded-lg sm:rounded-xl font-semibold text-sm sm:text-base transition disabled:opacity-50"
               >
                 {isChecking ? "Booking your ride..." : "Book Now"}
               </button>

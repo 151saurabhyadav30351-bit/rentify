@@ -88,8 +88,8 @@ export default function Managecars() {
         {/* Table */}
         {!loading && myCars.length > 0 && (
           <div>
-            {/* Header Row */}
-            <div className="grid grid-cols-12 px-6 py-3 text-xs font-semibold text-gray-900 border-b bg-gray-50">
+            {/* Header Row (Desktop only) */}
+            <div className="hidden lg:grid grid-cols-12 px-6 py-3 text-xs font-semibold text-gray-900 border-b bg-gray-50">
               <div className="col-span-6">Car</div>
               <div className="col-span-3">City</div>
               <div className="col-span-2">Price</div>
@@ -97,14 +97,15 @@ export default function Managecars() {
             </div>
 
             {/* Data Rows */}
+            <div className="space-y-4 sm:space-y-6">
             {myCars.map((car) => (
               <div
                 key={car._id}
-                className="group grid grid-cols-12 items-center px-6 py-4 border-b last:border-b-0 hover:bg-gray-50 transition-all duration-200"
+                className="bg-white border border-gray-100 rounded-2xl p-4 sm:p-6 shadow-sm hover:shadow-md transition block lg:grid lg:grid-cols-12 lg:items-center lg:px-6 lg:py-4"
               >
                 {/* Car Info */}
-                <div className="col-span-6 flex items-center gap-4">
-                  <div className="w-16 h-12 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
+                <div className="lg:col-span-6 flex gap-3 sm:gap-4 items-start mb-4 lg:mb-0">
+                  <div className="w-14 h-10 sm:w-16 sm:h-12 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
                     {car.image ? (
                       <img
                         src={car.image}
@@ -119,34 +120,46 @@ export default function Managecars() {
                   </div>
 
                   <div>
-                    <p className="font-semibold text-gray-900 leading-tight">
+                    <p className="font-semibold text-gray-900 leading-tight text-sm sm:text-base">
                       {car.title}
                     </p>
-                    <p className="text-xs text-gray-500">
-                      {car.seats || 4} seats •{" "}
-                      {car.transmission || "Manual"}
+                    <p className="text-xs text-gray-500 mt-1">
+                      {car.seats || 4} seats • {car.transmission || "Manual"}
                     </p>
                   </div>
                 </div>
 
-                {/* City */}
-                <div className="col-span-3 text-sm text-gray-600">
+                {/* City + Price + Actions (Mobile) */}
+                <div className="flex items-center justify-between w-full mb-3 lg:mb-0 lg:hidden">
+                  <div>
+                    <p className="text-xs text-gray-500 mb-1">Location</p>
+                    <p className="text-sm font-medium text-gray-900">{car.city}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-xs text-gray-500 mb-1">Price</p>
+                    <p className="font-semibold text-gray-900 text-sm">
+                      ₹{car.pricePerDay}<span className="text-gray-400 text-xs">/day</span>
+                    </p>
+                  </div>
+                </div>
+
+                {/* City (Desktop) */}
+                <div className="hidden lg:block lg:col-span-3 text-sm text-gray-600">
                   {car.city}
                 </div>
 
-                {/* Price */}
-                <div className="col-span-2 font-semibold text-gray-900">
+                {/* Price (Desktop) */}
+                <div className="hidden lg:block lg:col-span-2 font-semibold text-gray-900">
                   ₹{car.pricePerDay}
                   <span className="text-gray-400 text-xs">/day</span>
                 </div>
 
-                {/* ⭐ PREMIUM ACTIONS */}
-                <div className="col-span-1 flex justify-end">
-                  <div className="flex items-center gap-1.5 bg-gray-50 border border-gray-200 rounded-lg px-1.5 py-1 shadow-sm group-hover:shadow-md transition-all duration-200">
-                    
+                {/* Actions */}
+                <div className="lg:col-span-1 flex justify-start lg:justify-end">
+                  <div className="flex items-center gap-1 sm:gap-2 bg-gray-50 border border-gray-200 rounded-lg px-1 sm:px-1.5 py-1 shadow-sm hover:shadow-md transition-all duration-200">
                     <button
                       onClick={() => handleEdit(car)}
-                      className="p-2 rounded-md text-gray-500 hover:text-blue-900 hover:bg-white transition-all duration-150"
+                      className="p-1.5 sm:p-2 rounded-md text-gray-500 hover:text-blue-900 hover:bg-white transition-all duration-150"
                       title="Edit"
                     >
                       <Pencil size={16} />
@@ -154,16 +167,16 @@ export default function Managecars() {
 
                     <button
                       onClick={() => handleDelete(car._id)}
-                      className="p-2 rounded-md text-gray-400 hover:text-red-600 hover:bg-white transition-all duration-150"
+                      className="p-1.5 sm:p-2 rounded-md text-gray-400 hover:text-red-600 hover:bg-white transition-all duration-150"
                       title="Delete"
                     >
                       <Trash2 size={16} />
                     </button>
-
                   </div>
                 </div>
               </div>
             ))}
+            </div>
           </div>
         )}
       </div>

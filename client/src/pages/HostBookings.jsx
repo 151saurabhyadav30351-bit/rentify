@@ -38,65 +38,65 @@ export default function HostBookings() {
 
   return (
     // ⭐ DASHBOARD-NATIVE WRAPPER (FIXED)
-    <div className="p-6 md:p-8">
+    <div className="p-4 sm:p-6 md:p-8">
       {/* ================= HEADER ================= */}
-      <div className="mb-10 max-w-5xl">
-        <h2 className="text-4xl font-bold text-gray-900 tracking-tight">
+      <div className="mb-8 sm:mb-10 max-w-5xl">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">
           Host Dashboard
         </h2>
-        <p className="text-gray-500 mt-2">
+        <p className="text-sm sm:text-base text-gray-500 mt-2">
           Monitor your performance and manage bookings
         </p>
       </div>
 
       {/* ================= STATS ================= */}
-      <div className="max-w-5xl grid grid-cols-1 sm:grid-cols-3 gap-6 mb-14">
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-          <p className="text-sm text-gray-500">Total Earnings</p>
-          <p className="text-3xl font-bold text-green-600 mt-2">
+      <div className="max-w-5xl grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-10 sm:mb-14">
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6">
+          <p className="text-xs sm:text-sm text-gray-500">Total Earnings</p>
+          <p className="text-2xl sm:text-3xl font-bold text-green-600 mt-2">
             ₹{analytics.totalEarnings}
           </p>
         </div>
 
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-          <p className="text-sm text-gray-500">Total Bookings</p>
-          <p className="text-3xl font-bold text-blue-600 mt-2">
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6">
+          <p className="text-xs sm:text-sm text-gray-500">Total Bookings</p>
+          <p className="text-2xl sm:text-3xl font-bold text-blue-600 mt-2">
             {analytics.totalBookings}
           </p>
         </div>
 
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-          <p className="text-sm text-gray-500">Cars Booked</p>
-          <p className="text-3xl font-bold text-purple-600 mt-2">
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6">
+          <p className="text-xs sm:text-sm text-gray-500">Cars Booked</p>
+          <p className="text-2xl sm:text-3xl font-bold text-purple-600 mt-2">
             {analytics.activeCars}
           </p>
         </div>
       </div>
 
       {/* ================= BOOKINGS HEADER ================= */}
-      <div className="max-w-5xl flex items-center justify-between mb-6">
-        <h3 className="text-2xl font-semibold text-gray-900">
+      <div className="max-w-5xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 mb-6">
+        <h3 className="text-xl sm:text-2xl font-semibold text-gray-900">
           Bookings
         </h3>
 
-        <span className="text-sm text-gray-500">
+        <span className="text-xs sm:text-sm text-gray-500">
           {bookings.length} total
         </span>
       </div>
 
       {/* ================= EMPTY STATE ================= */}
       {bookings.length === 0 ? (
-        <div className="max-w-5xl bg-white border border-gray-100 rounded-2xl shadow-sm py-20 px-6 text-center">
+        <div className="max-w-5xl bg-white border border-gray-100 rounded-2xl shadow-sm py-16 sm:py-20 px-4 sm:px-6 text-center">
           <div className="max-w-sm mx-auto">
-            <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-gray-100 flex items-center justify-center">
-              <CalendarDays size={26} className="text-gray-400" />
+            <div className="w-12 sm:w-14 h-12 sm:h-14 mx-auto mb-4 rounded-xl bg-gray-100 flex items-center justify-center">
+              <CalendarDays size={24} className="text-gray-400" />
             </div>
 
-            <h4 className="text-lg font-semibold text-gray-900">
+            <h4 className="text-base sm:text-lg font-semibold text-gray-900">
               No bookings yet
             </h4>
 
-            <p className="text-sm text-gray-500 mt-2">
+            <p className="text-xs sm:text-sm text-gray-500 mt-2">
               When customers book your cars, the reservations will appear here.
             </p>
           </div>
@@ -106,17 +106,17 @@ export default function HostBookings() {
           {bookings.map((booking) => (
             <div
               key={booking._id}
-              className="bg-white border border-gray-100 rounded-2xl p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6 shadow-sm hover:shadow-md transition"
+              className="bg-white border border-gray-100 rounded-2xl p-4 sm:p-6 block md:flex md:flex-row md:items-center md:justify-between md:gap-6 shadow-sm hover:shadow-md transition"
             >
               {/* LEFT */}
-              <div className="flex gap-5 items-start">
+              <div className="flex gap-4 sm:gap-5 items-start mb-4 md:mb-0">
                 <img
                   src={
                     booking.car?.image ||
                     `https://ui-avatars.com/api/?name=${booking.car?.title}`
                   }
                   alt={booking.car?.title}
-                  className="w-40 h-24 rounded-xl object-cover bg-gray-100"
+                  className="w-32 h-20 sm:w-40 sm:h-24 rounded-xl object-cover bg-gray-100 flex-shrink-0"
                 />
 
                 <div>
@@ -148,7 +148,7 @@ export default function HostBookings() {
               </div>
 
               {/* RIGHT */}
-              <div className="text-right min-w-[160px]">
+              <div className="text-left md:text-right md:min-w-[160px]">
                 <p className="text-sm text-gray-500">You Earn</p>
                 <p className="text-3xl font-bold text-green-600">
                   ₹{booking.totalAmount}

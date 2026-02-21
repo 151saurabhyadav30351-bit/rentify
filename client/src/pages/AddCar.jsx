@@ -102,27 +102,27 @@ export default function AddCar() {
   };
 
   return (
-    <div className="p-6 md:p-8 max-w-7xl">
+    <div className="p-4 sm:p-6 md:p-8 max-w-7xl">
       {/* Header */}
-      <div className="mb-8">
+      <div className="mb-6 sm:mb-8">
         <div className="flex items-center gap-3 mb-1">
           <CarFront className="text-blue-900" size={30} />
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
             Add New Car
           </h1>
         </div>
-        <p className="text-gray-500">
+        <p className="text-sm sm:text-base text-gray-500">
           Fill in the details to list your vehicle for bookings.
         </p>
       </div>
 
       {/* Main Grid */}
-      <div className="grid lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* LEFT — FORM */}
-        <div className="lg:col-span-2 bg-white rounded-2xl border shadow-sm p-6 md:p-8 space-y-6">
+        <div className="lg:col-span-2 bg-white rounded-2xl border shadow-sm p-4 sm:p-6 md:p-8 space-y-6">
           <SectionTitle title="Basic Information" />
 
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input label="Car Title" onChange={setTitle} />
             <Input label="Brand" onChange={setBrand} />
             <Input label="City" onChange={setCity} />
@@ -131,7 +131,7 @@ export default function AddCar() {
 
           <SectionTitle title="Car Specifications" />
 
-          <div className="grid md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <Input label="Seats" type="number" onChange={setSeats} />
 
             <Select
@@ -168,7 +168,7 @@ export default function AddCar() {
         </div>
 
         {/* RIGHT — IMAGE PANEL */}
-        <div className="bg-white rounded-2xl border shadow-sm p-6 h-fit sticky top-24">
+        <div className="bg-white rounded-2xl border shadow-sm p-4 sm:p-6 h-fit sticky top-24">
           <h3 className="font-semibold text-gray-900 mb-4">
             Car Image
           </h3>
@@ -238,12 +238,12 @@ function SectionTitle({ title }) {
 function Input({ label, type = "text", onChange }) {
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">
+      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
         {label}
       </label>
       <input
         type={type}
-        className="w-full border rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full border rounded-lg px-3 sm:px-4 py-2 sm:py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         onChange={(e) => onChange(e.target.value)}
       />
     </div>
@@ -253,12 +253,12 @@ function Input({ label, type = "text", onChange }) {
 function Select({ label, value, onChange, options }) {
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">
+      <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
         {label}
       </label>
       <select
         value={value}
-        className="w-full border rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full border rounded-lg px-3 sm:px-4 py-2 sm:py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         onChange={(e) => onChange(e.target.value)}
       >
         {options.map((opt) => (

@@ -46,23 +46,23 @@ export default function About() {
 
 
   return (
-    <div className="pt-28">
+    <div className="pt-20 md:pt-28 px-4">
 
-      <div className="px-6 max-w-6xl mx-auto">
+      <div className="max-w-3xl md:max-w-6xl mx-auto">
 
         {/* Heading */}
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-blue-900">
+        <div className="text-center mb-8 md:mb-12">
+          <h1 className="text-3xl md:text-5xl font-bold text-blue-900 leading-tight">
             About Rentify
           </h1>
-          <p className="text-black-500 mt-2">
+          <p className="text-gray-600 mt-2 text-sm md:text-base">
             Smart car rentals made simple
           </p>
         </div>
 
         {/* Intro */}
-        <div className="bg-white shadow rounded-2xl p-8 mb-10 hover:shadow-lg transition">
-          <p className="text-gray-600 leading-relaxed text-center">
+        <div className="bg-white shadow-sm md:shadow rounded-2xl p-4 md:p-8 mb-6 md:mb-10 transition">
+          <p className="text-gray-600 leading-relaxed text-center text-sm md:text-base">
             Rentify is a modern car rental platform designed to help users easily find, compare,
             and book cars based on their needs. Whether it’s a short city ride or a long journey,
             Rentify makes the process fast, transparent, and convenient.
@@ -70,23 +70,23 @@ export default function About() {
         </div>
 
         {/* Mission + Vision */}
-        <div className="grid md:grid-cols-2 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
 
-          <div className="bg-white shadow rounded-2xl p-6 hover:shadow-lg transition text-center">
-            <h3 className="text-xl font-semibold text-blue-900 mb-2">
+          <div className="bg-white shadow-sm md:shadow rounded-2xl p-4 md:p-6 transition text-center">
+            <h3 className="text-lg md:text-xl font-semibold text-blue-900 mb-2">
               Our Mission
             </h3>
-            <p className="text-gray-600">
+            <p className="text-gray-600 text-sm md:text-base">
               To provide a simple and reliable car rental experience by combining modern
               technology with user-friendly design.
             </p>
           </div>
 
-          <div className="bg-white shadow rounded-2xl p-6 hover:shadow-lg transition text-center">
-            <h3 className="text-xl font-semibold text-blue-900 mb-2">
+          <div className="bg-white shadow-sm md:shadow rounded-2xl p-4 md:p-6 transition text-center">
+            <h3 className="text-lg md:text-xl font-semibold text-blue-900 mb-2">
               Our Vision
             </h3>
-            <p className="text-gray-600">
+            <p className="text-gray-600 text-sm md:text-base">
               To become a trusted platform where anyone can rent cars easily and confidently.
             </p>
           </div>
@@ -95,40 +95,40 @@ export default function About() {
       </div>
 
       {/* OUR VALUES SECTION */}
-<div className="bg-gray-50 py-20">
+<div className="bg-gray-50 py-12 md:py-20">
 
-  <div className="max-w-8xl mx-auto px-40">
+  <div className="max-w-7xl mx-auto px-4 md:px-40">
 
-    <div className="text-center max-w-2xl mx-auto mb-16">
+    <div className="text-center max-w-2xl mx-auto mb-10 md:mb-16">
       <span className="text-blue-700 font-medium text-sm uppercase tracking-wider">
         Our Values
       </span>
 
-      <h2 className="text-3xl md:text-4xl font-bold text-black-900 mt-2">
+      <h2 className="text-2xl md:text-3xl font-bold text-black-900 mt-2">
         What We Stand For
       </h2>
     </div>
 
-    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
 
 
       {values.map((item, i) => (
         <div
           key={i}
-          className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition text-center"
+          className="bg-white p-4 md:p-6 rounded-lg md:rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition text-center"
         >
 
           {/* Icon box */}
-          <div className="w-14 h-14 mx-auto rounded-xl bg-gray-100 flex items-center justify-center mb-4">
-              <img src={item.icon} alt="" className="w-7 h-7 opacity-80" />
+          <div className="w-12 h-12 md:w-14 md:h-14 mx-auto rounded-lg bg-gray-100 flex items-center justify-center mb-3 md:mb-4">
+              <img src={item.icon} alt="" className="w-6 h-6 md:w-7 md:h-7 opacity-90" />
           </div>
 
 
-          <h3 className="text-lg font-semibold text-black-900 mb-2">
+          <h3 className="text-base md:text-lg font-semibold text-black-900 mb-1 md:mb-2">
             {item.title}
           </h3>
 
-          <p className="text-gray-500 text-sm">
+          <p className="text-gray-500 text-sm md:text-sm">
             {item.desc}
           </p>
 
