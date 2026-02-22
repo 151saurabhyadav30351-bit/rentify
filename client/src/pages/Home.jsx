@@ -100,7 +100,7 @@ export default function Home() {
         </div>
 
         {/* ================= ELITE HERO SEARCH ================= */}
-        <div className="relative md:absolute md:bottom-52 md:left-1/2 md:-translate-x-1/2 w-full px-6 mt-6 md:mt-0">
+        <div className="relative md:absolute md:bottom-52 md:left-1/2 md:-translate-x-1/2 w-full px-6 mt-6 md:mt-0 z-20">
           <div className="max-w-5xl mx-auto">
 
             <div className="
