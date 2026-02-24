@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema(
       unique: true,
       lowercase: true,
       trim: true,
+      index: true, // ⭐ extra safety
     },
 
     password: {
@@ -35,6 +36,9 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+// ⭐ HARD UNIQUE INDEX (race-condition safe)
+userSchema.index({ email: 1 }, { unique: true });
 
 const User = mongoose.model("User", userSchema);
 
