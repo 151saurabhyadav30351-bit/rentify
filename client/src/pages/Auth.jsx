@@ -3,12 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff, CarFront } from "lucide-react";
 import toast from "react-hot-toast";
 import API from "../api";
-import { useUser } from "../UserContext"; // ⭐ IMPORTANT
+import { useUser } from "../UserContext";
 
 export default function Auth() {
   const navigate = useNavigate();
-  const { loginUser } = useUser(); // ⭐ CRITICAL
+  const { loginUser } = useUser();
 
+  // ✅ simple email regex
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  // ✅ state
   const [isSignup, setIsSignup] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showPass, setShowPass] = useState(false);
@@ -17,17 +21,49 @@ export default function Auth() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  // ⭐ NEW — inline errors
+  const [errors, setErrors] = useState({});
+
+  // ================= VALIDATION =================
+  const validateForm = () => {
+    const newErrors = {};
+
+    const trimmedEmail = email.trim().toLowerCase();
+
+    if (isSignup && !name.trim()) {
+      newErrors.name = "Name is required";
+    }
+
+    if (!emailRegex.test(trimmedEmail)) {
+      newErrors.email = "Enter a valid email address";
+    }
+
+    // ✅ ONLY MIN LENGTH (as you requested)
+    if (password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // ================= SUBMIT =================
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // ✅ run validation first
+    if (!validateForm()) return;
+
+    const trimmedEmail = email.trim().toLowerCase();
 
     try {
       setLoading(true);
 
       if (isSignup) {
-        // ✅ REGISTER
+        // REGISTER
         await API.post("/api/auth/register", {
           name,
-          email,
+          email: trimmedEmail,
           password,
         });
 
@@ -35,18 +71,16 @@ export default function Auth() {
         setIsSignup(false);
         setName("");
         setPassword("");
+        setErrors({});
       } else {
-        // ✅ LOGIN
+        // LOGIN
         const res = await API.post("/api/auth/login", {
-          email,
+          email: trimmedEmail,
           password,
         });
 
-        // ⭐⭐⭐ THE REAL FIX
         await loginUser(res.data.token);
-
         toast.success("Welcome back!");
-
         navigate("/");
       }
     } catch (err) {
@@ -58,10 +92,8 @@ export default function Auth() {
 
   return (
     <div className="min-h-screen grid lg:grid-cols-2 bg-gray-50">
-      
       {/* ================= LEFT BRAND PANEL ================= */}
       <div className="hidden lg:flex flex-col justify-center px-12 lg:px-16 bg-gradient-to-br from-blue-900 via-blue-800 to-teal-500 text-white relative overflow-hidden">
-        
         <div className="absolute top-20 left-20 w-72 h-72 bg-cyan-300/30 rounded-full blur-3xl" />
         <div className="absolute bottom-20 right-20 w-80 h-80 bg-blue-400/30 rounded-full blur-3xl" />
 
@@ -93,7 +125,6 @@ export default function Auth() {
       {/* ================= RIGHT FORM PANEL ================= */}
       <div className="flex items-center justify-center px-4 sm:px-6 py-8 sm:py-12">
         <div className="w-full max-w-md">
-
           <div className="lg:hidden text-center mb-6 sm:mb-8">
             <div className="flex justify-center items-center gap-2 mb-2">
               <CarFront className="text-blue-900 w-6 sm:w-8 h-6 sm:h-8" />
@@ -115,7 +146,7 @@ export default function Auth() {
             </p>
 
             <form className="space-y-3 sm:space-y-4" onSubmit={handleSubmit}>
-              
+              {/* NAME */}
               {isSignup && (
                 <div>
                   <label className="text-xs sm:text-sm font-medium text-gray-700">
@@ -125,12 +156,17 @@ export default function Auth() {
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    required
                     className="w-full mt-1.5 px-3 sm:px-4 py-2.5 border border-gray-300 rounded-lg sm:rounded-xl text-sm focus:ring-2 focus:ring-blue-900/20 focus:border-blue-900 outline-none"
                   />
+                  {errors.name && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.name}
+                    </p>
+                  )}
                 </div>
               )}
 
+              {/* EMAIL */}
               <div>
                 <label className="text-xs sm:text-sm font-medium text-gray-700">
                   Email address
@@ -139,11 +175,16 @@ export default function Auth() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  required
                   className="w-full mt-1.5 px-3 sm:px-4 py-2.5 border border-gray-300 rounded-lg sm:rounded-xl text-sm focus:ring-2 focus:ring-blue-900/20 focus:border-blue-900 outline-none"
                 />
+                {errors.email && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.email}
+                  </p>
+                )}
               </div>
 
+              {/* PASSWORD */}
               <div className="relative">
                 <label className="text-xs sm:text-sm font-medium text-gray-700">
                   Password
@@ -153,7 +194,6 @@ export default function Auth() {
                   type={showPass ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  required
                   className="w-full mt-1.5 px-3 sm:px-4 py-2.5 border border-gray-300 rounded-lg sm:rounded-xl pr-10 sm:pr-12 text-sm focus:ring-2 focus:ring-blue-900/20 focus:border-blue-900 outline-none"
                 />
 
@@ -164,6 +204,12 @@ export default function Auth() {
                 >
                   {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
+
+                {errors.password && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.password}
+                  </p>
+                )}
               </div>
 
               <button
@@ -182,7 +228,10 @@ export default function Auth() {
             </form>
 
             <p
-              onClick={() => setIsSignup(!isSignup)}
+              onClick={() => {
+                setIsSignup(!isSignup);
+                setErrors({});
+              }}
               className="text-center text-xs sm:text-sm text-blue-700 mt-4 sm:mt-6 cursor-pointer font-medium hover:underline"
             >
               {isSignup
