@@ -23,27 +23,6 @@ export default function AdminCars() {
     fetchCars();
   }, []);
 
-  // ================= DISABLE =================
-  const handleToggleDisable = async (carId) => {
-    try {
-      setActionLoading(carId);
-
-      const res = await API.patch(`/api/admin/cars/${carId}/disable`);
-
-      setCars((prev) =>
-        prev.map((c) =>
-          c._id === carId ? { ...c, isDisabled: res.data.isDisabled } : c
-        )
-      );
-
-      toast.success(res.data.message);
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Action failed");
-    } finally {
-      setActionLoading(null);
-    }
-  };
-
   // ================= DELETE =================
   const handleDeleteCar = async (carId) => {
     const confirmDelete = window.confirm(
@@ -66,7 +45,6 @@ export default function AdminCars() {
     }
   };
 
-  // ================= LOADING =================
   if (loading) {
     return <p className="text-gray-500">Loading cars...</p>;
   }
@@ -91,66 +69,56 @@ export default function AdminCars() {
           </thead>
 
           <tbody>
-            {cars.map((car) => (
-              <tr
-                key={car._id}
-                className="border-t hover:bg-gray-50 transition"
-              >
-                <td className="p-4 font-medium">
-                  {car.brand} {car.title}
+            {cars.length === 0 ? (
+              <tr>
+                <td colSpan="6" className="p-10 text-center text-gray-500">
+                  No cars available
                 </td>
+              </tr>
+            ) : (
+              cars.map((car) => (
+                <tr
+                  key={car._id}
+                  className="border-t hover:bg-gray-50 transition"
+                >
+                  <td className="p-4 font-medium">
+                    {car.brand} {car.title}
+                  </td>
 
-                <td className="p-4 text-gray-600">{car.city}</td>
+                  <td className="p-4 text-gray-600">{car.city}</td>
 
-                <td className="p-4">₹{car.pricePerDay}</td>
+                  <td className="p-4">₹{car.pricePerDay}</td>
 
-                <td className="p-4 text-gray-600">
-                  {car.owner?.name || "—"}
-                </td>
+                  <td className="p-4 text-gray-600">
+                    {car.owner?.name || "—"}
+                  </td>
 
-                <td className="p-4">
-                  {car.isDisabled ? (
-                    <span className="px-2 py-1 text-xs rounded-full bg-red-100 text-red-700">
-                      Disabled
-                    </span>
-                  ) : (
-                    <span className="px-2 py-1 text-xs rounded-full bg-emerald-100 text-emerald-700">
-                      Active
-                    </span>
-                  )}
-                </td>
+                  <td className="p-4">
+                    {car.isDisabled ? (
+                      <span className="px-2 py-1 text-xs rounded-full bg-red-100 text-red-700">
+                        Disabled
+                      </span>
+                    ) : (
+                      <span className="px-2 py-1 text-xs rounded-full bg-emerald-100 text-emerald-700">
+                        Active
+                      </span>
+                    )}
+                  </td>
 
-                <td className="p-4">
-                  <div className="flex gap-2 flex-wrap">
-                    <button
-                      onClick={() => handleToggleDisable(car._id)}
-                      disabled={actionLoading === car._id}
-                      className={`px-3 py-1.5 text-xs rounded-lg font-medium transition
-                        ${
-                          car.isDisabled
-                            ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
-                            : "bg-amber-100 text-amber-700 hover:bg-amber-200"
-                        }
-                        disabled:opacity-50`}
-                    >
-                      {actionLoading === car._id
-                        ? "Please..."
-                        : car.isDisabled
-                        ? "Enable"
-                        : "Disable"}
-                    </button>
-
+                  <td className="p-4">
                     <button
                       onClick={() => handleDeleteCar(car._id)}
                       disabled={actionLoading === car._id}
                       className="px-3 py-1.5 text-xs rounded-lg font-medium bg-red-100 text-red-700 hover:bg-red-200 transition disabled:opacity-50"
                     >
-                      Delete
+                      {actionLoading === car._id
+                        ? "Deleting..."
+                        : "Delete"}
                     </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

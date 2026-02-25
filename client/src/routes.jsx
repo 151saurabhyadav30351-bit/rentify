@@ -20,6 +20,7 @@ import AdminOverview from "./pages/admin/AdminOverview";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminCars from "./pages/admin/AdminCars";
 import AdminBookings from "./pages/admin/AdminBookings";
+import AdminContacts from "./pages/admin/AdminContacts";
 // ⭐ NEW
 import HostBookings from "./pages/HostBookings";
 
@@ -66,6 +67,7 @@ export default function AppRoutes() {
           <Route path="users" element={<AdminUsers />} />
           <Route path="cars" element={<AdminCars />} />
           <Route path="bookings" element={<AdminBookings />} />
+          <Route path="support" element={<AdminContacts />} />
         </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

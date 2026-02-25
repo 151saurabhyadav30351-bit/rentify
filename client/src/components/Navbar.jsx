@@ -8,7 +8,6 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
-    // prevent background scroll when mobile menu is open
     if (isMenuOpen) {
       document.body.style.overflow = "hidden";
     } else {
@@ -19,27 +18,32 @@ export default function Navbar() {
     };
   }, [isMenuOpen]);
 
-  // ⭐ SINGLE SOURCE OF TRUTH
+  // ⭐ USER CONTEXT
   const { user } = useUser();
 
   const location = useLocation();
   const navigate = useNavigate();
 
-  // ⭐ derive auth state from user (NOT localStorage)
   const isLoggedIn = !!user;
+  const isHost = user?.isHost || false;
+  const isAdmin = user?.isAdmin || false; // ⭐ NEW
 
   const avatar = user?.avatar || "";
   const userName = user?.name || "";
-  const isHost = user?.isHost || false;
 
   const isActive = (path) => location.pathname === path;
 
+  // ⭐ FILTER NAV LINKS FOR ADMIN
   const navLinks = [
     { path: "/", label: "Home" },
     { path: "/cars", label: "Cars" },
     { path: "/about", label: "About" },
     { path: "/contact", label: "Contact" },
-  ];
+  ].filter((link) => {
+    // ❌ hide Contact for admin
+    if (isAdmin && link.path === "/contact") return false;
+    return true;
+  });
 
   return (
     <nav className="bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50">
@@ -54,8 +58,12 @@ export default function Navbar() {
               className="w-8 sm:w-10 h-8 sm:h-10 object-contain"
             />
             <div className="block">
-              <h1 className="font-bold text-sm sm:text-xl text-blue-900">Rentify</h1>
-              <p className="hidden sm:block text-xs text-gray-500 -mt-1">Drive Your Way</p>
+              <h1 className="font-bold text-sm sm:text-xl text-blue-900">
+                Rentify
+              </h1>
+              <p className="hidden sm:block text-xs text-gray-500 -mt-1">
+                Drive Your Way
+              </p>
             </div>
           </Link>
 
@@ -75,8 +83,8 @@ export default function Navbar() {
               </Link>
             ))}
 
-            {/* ⭐ only when logged in */}
-            {isLoggedIn && (
+            {/* ⭐ My Rides — hide for admin */}
+            {isLoggedIn && !isAdmin && (
               <Link
                 to="/dashboard/bookings"
                 className={`relative transition-colors text-sm lg:text-base ${
@@ -93,8 +101,8 @@ export default function Navbar() {
           {/* Right Actions */}
           <div className="hidden md:flex items-center gap-2 lg:gap-4 min-w-fit justify-end">
 
-            {/* ⭐ Become Host — FIXED */}
-            {isLoggedIn && !isHost && (
+            {/* ⭐ Become Host — hide for admin */}
+            {isLoggedIn && !isHost && !isAdmin && (
               <Link
                 to="/host"
                 className="border border-blue-900 text-blue-900 px-3 lg:px-4 py-2 rounded-lg hover:bg-blue-900 hover:text-white transition-colors text-xs lg:text-sm font-medium"
@@ -113,7 +121,9 @@ export default function Navbar() {
               </Link>
             ) : (
               <button
-                onClick={() => navigate("/dashboard/profile")}
+                onClick={() =>
+                  navigate(isAdmin ? "/admin" : "/dashboard/profile")
+                }
                 className="flex items-center gap-2 pl-2 pr-3 lg:pr-4 py-1.5 rounded-full border border-gray-200 hover:border-blue-300 hover:shadow-sm transition bg-white"
               >
                 <img
@@ -150,16 +160,16 @@ export default function Navbar() {
         }`}
         style={{ display: isMenuOpen ? "block" : "none" }}
       >
-        {/* Backdrop */}
         <div
           onClick={() => setIsMenuOpen(false)}
           className={`absolute inset-0 transition-opacity duration-300 ${
             isMenuOpen ? "opacity-100" : "opacity-0"
           }`}
-          style={{ backgroundColor: isMenuOpen ? "rgba(0,0,0,0.6)" : "transparent" }}
+          style={{
+            backgroundColor: isMenuOpen ? "rgba(0,0,0,0.6)" : "transparent",
+          }}
         />
 
-        {/* Drawer */}
         <div
           className={`absolute top-0 right-0 z-[1000] w-64 sm:w-72 transform transition-transform duration-300`}
           style={{
@@ -170,18 +180,17 @@ export default function Navbar() {
             minHeight: "100vh",
             boxShadow: "0 10px 30px rgba(2,6,23,0.12)",
           }}
-          aria-hidden={!isMenuOpen}
         >
           <div className="p-4 sm:p-6 space-y-6">
-            {/* Close button */}
             <div className="flex justify-between items-center bg-white pb-3 border-b border-gray-100">
-              <h2 className="font-semibold text-blue-900 text-base sm:text-lg">Menu</h2>
+              <h2 className="font-semibold text-blue-900 text-base sm:text-lg">
+                Menu
+              </h2>
               <button onClick={() => setIsMenuOpen(false)} className="p-1">
                 <X size={20} />
               </button>
             </div>
 
-            {/* Links */}
             <div className="space-y-3 sm:space-y-4">
               {navLinks.map((link) => (
                 <Link
@@ -198,7 +207,8 @@ export default function Navbar() {
                 </Link>
               ))}
 
-              {isLoggedIn && (
+              {/* ⭐ hide My Rides for admin */}
+              {isLoggedIn && !isAdmin && (
                 <Link
                   to="/dashboard/bookings"
                   onClick={() => setIsMenuOpen(false)}
@@ -208,7 +218,8 @@ export default function Navbar() {
                 </Link>
               )}
 
-              {isLoggedIn && !isHost && (
+              {/* ⭐ hide Become Host for admin */}
+              {isLoggedIn && !isHost && !isAdmin && (
                 <Link
                   to="/host"
                   onClick={() => setIsMenuOpen(false)}
@@ -231,7 +242,7 @@ export default function Navbar() {
               {isLoggedIn && (
                 <button
                   onClick={() => {
-                    navigate("/dashboard/profile");
+                    navigate(isAdmin ? "/admin" : "/dashboard/profile");
                     setIsMenuOpen(false);
                   }}
                   className="block w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 text-sm sm:text-base"
@@ -246,7 +257,9 @@ export default function Navbar() {
                     alt="avatar"
                     className="w-8 h-8 rounded-full object-cover"
                   />
-                  <span className="font-medium text-gray-700">{userName || "User"}</span>
+                  <span className="font-medium text-gray-700">
+                    {userName || "User"}
+                  </span>
                 </button>
               )}
             </div>

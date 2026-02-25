@@ -4,6 +4,7 @@ import {
   Users,
   Car,
   CalendarCheck,
+  Mail ,
   LogOut,
 } from "lucide-react";
 import { useUser } from "../../UserContext";
@@ -51,6 +52,13 @@ export default function AdminLayout() {
             className="flex items-center gap-2 text-gray-600 hover:text-blue-900"
           >
             <CalendarCheck size={18} /> Bookings
+          </NavLink>
+
+          <NavLink
+            to="/admin/support"
+            className="flex items-center gap-2 text-gray-600 hover:text-blue-900"
+          >
+            <Mail size={18} /> Support
           </NavLink>
 
           <button

@@ -135,10 +135,10 @@ export default function CarDetails() {
         Back to all cars
       </Link>
 
-      <div className="block lg:grid lg:grid-cols-3 lg:gap-12 space-y-6 lg:space-y-0">
+      <div className="grid lg:grid-cols-3 gap-12">
         {/* LEFT */}
-        <div className="w-full">
-          <div className="relative bg-white rounded-2xl sm:rounded-3xl shadow-lg overflow-hidden">
+        <div className="lg:col-span-2">
+          <div className="relative bg-white rounded-3xl shadow-lg overflow-hidden">
             <img
               src={
                 car.image?.trim()
@@ -146,11 +146,11 @@ export default function CarDetails() {
                   : `https://ui-avatars.com/api/?name=${car.name}&background=0F2D52&color=fff`
               }
               alt={car.name}
-              className="w-full h-48 sm:h-64 md:h-80 lg:h-[440px] object-contain bg-gray-100"
+              className="w-full h-[440px] object-contain bg-gray-100"
             />
 
             <span
-              className={`absolute top-3 sm:top-5 left-3 sm:left-5 text-xs font-semibold px-3 sm:px-4 py-1 sm:py-1.5 rounded-full shadow-sm ${
+              className={`absolute top-5 left-5 text-xs font-semibold px-4 py-1.5 rounded-full shadow-sm ${
                 isAvailable
                   ? "bg-green-100 text-green-700"
                   : "bg-red-100 text-red-600"
