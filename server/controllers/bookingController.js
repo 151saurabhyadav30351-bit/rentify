@@ -19,12 +19,13 @@ export const createBooking = async (req, res) => {
       city,
     } = req.body;
 
-    // 🛡️ ObjectId validation (ADD THIS)
-      if (!mongoose.Types.ObjectId.isValid(carId)) {
-        return res.status(400).json({
-          message: "Invalid car id",
-        });
-      }
+    // 🛡️ ObjectId validation
+    if (!mongoose.Types.ObjectId.isValid(carId)) {
+      return res.status(400).json({
+        message: "Invalid car id",
+      });
+    }
+
     // 🛡️ Basic validation
     if (!carId || !fromDate || !toDate) {
       return res.status(400).json({
@@ -32,10 +33,26 @@ export const createBooking = async (req, res) => {
       });
     }
 
+    // ✅ NEW — check car exists & availability
+    const car = await Car.findById(carId);
+
+    if (!car) {
+      return res.status(404).json({
+        message: "Car not found",
+      });
+    }
+
+    // 🔴 CRITICAL FIX — prevent booking disabled car
+    if (!car.isAvailable) {
+      return res.status(400).json({
+        message: "This car is currently unavailable",
+      });
+    }
+
     // 🛡️ Date validation
     const start = new Date(fromDate);
     const end = new Date(toDate);
-    // 🛡️ Prevent past booking (ADD)
+
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -44,6 +61,7 @@ export const createBooking = async (req, res) => {
         message: "Cannot book past dates",
       });
     }
+
     if (end <= start) {
       return res.status(400).json({
         message: "Invalid date range",
@@ -56,12 +74,7 @@ export const createBooking = async (req, res) => {
       fromDate: { $lte: toDate },
       toDate: { $gte: fromDate },
     });
-    // 🛡️ ObjectId validation
-    if (!mongoose.Types.ObjectId.isValid(carId)) {
-      return res.status(400).json({
-        message: "Invalid car id",
-      });
-    }
+
     if (conflict) {
       return res.status(409).json({
         message: "Car already booked for selected dates",
@@ -107,27 +120,25 @@ export const getMyBookings = async (req, res) => {
 
 /*
 -----------------------------------
-🔥 GET HOST BOOKINGS (NEW — IMPORTANT)
+🔥 GET HOST BOOKINGS
 -----------------------------------
 */
 export const getHostBookings = async (req, res) => {
-  // 🛡️ ensure user is actually a host
-    const userIsHost = await Car.exists({ owner: req.user.id });
+  const userIsHost = await Car.exists({ owner: req.user.id });
 
-    if (!userIsHost) {
-      return res.status(403).json({
-        message: "Host access only",
-      });
-    }
+  if (!userIsHost) {
+    return res.status(403).json({
+      message: "Host access only",
+    });
+  }
+
   try {
-    // 1️⃣ Find cars owned by this host
     const hostCars = await Car.find({
       owner: req.user.id,
     }).select("_id");
 
     const carIds = hostCars.map((car) => car._id);
 
-    // 2️⃣ Find bookings for those cars
     const bookings = await Booking.find({
       car: { $in: carIds },
     })
