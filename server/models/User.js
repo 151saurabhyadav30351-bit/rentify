@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema(
       unique: true,
       lowercase: true,
       trim: true,
-      index: true, // ⭐ extra safety
+      index: true, 
     },
 
     password: {
