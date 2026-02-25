@@ -10,12 +10,13 @@ export default function AdminProtectedRoute({ children }) {
   try {
     const payload = JSON.parse(atob(token.split(".")[1]));
 
-    if (!payload.isAdmin) {
+    if (!payload?.isAdmin) {
       return <Navigate to="/" replace />;
     }
 
     return children;
-  } catch {
+  } catch (err) {
+    console.error("Admin route error:", err);
     return <Navigate to="/auth" replace />;
   }
 }

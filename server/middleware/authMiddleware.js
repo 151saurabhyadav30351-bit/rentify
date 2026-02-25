@@ -10,7 +10,13 @@ export default function protect(req, res, next) {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    req.user = decoded;
+    // ⭐ ENSURE ALL FIELDS AVAILABLE
+    req.user = {
+      id: decoded.id,
+      isHost: decoded.isHost || false,
+      isAdmin: decoded.isAdmin || false,
+    };
+
     next();
   } catch (error) {
     return res.status(401).json({ message: "Token invalid or expired" });
