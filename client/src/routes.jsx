@@ -14,7 +14,9 @@ import ManageCars from "./pages/Managecars";
 import Host from "./pages/Host";
 import EditCar from "./pages/EditCar";
 import ProtectedRoute from "./components/ProtectedRoute";
-
+import AdminProtectedRoute from "./components/AdminProtectedRoute";
+import AdminLayout from "./pages/admin/AdminLayout";
+import AdminOverview from "./pages/admin/AdminOverview";
 // ⭐ NEW
 import HostBookings from "./pages/HostBookings";
 
@@ -48,7 +50,17 @@ export default function AppRoutes() {
         {/* ⭐ NEW HOST ROUTE */}
         <Route path="host-bookings" element={<HostBookings />} />
       </Route>
-
+        {/* ⭐ ADMIN ROUTES */}
+<Route
+  path="/admin"
+  element={
+    <AdminProtectedRoute>
+      <AdminLayout />
+    </AdminProtectedRoute>
+  }
+>
+  <Route index element={<AdminOverview />} />
+</Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

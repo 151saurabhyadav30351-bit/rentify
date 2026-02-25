@@ -118,6 +118,7 @@ export const loginUser = async (req, res) => {
       {
         id: user._id,
         isHost: user.isHost,
+        isAdmin: user.isAdmin || false, // ⭐ NEW
       },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
