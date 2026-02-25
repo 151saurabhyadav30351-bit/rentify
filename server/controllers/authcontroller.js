@@ -106,7 +106,14 @@ export const loginUser = async (req, res) => {
 
     if (!user) {
       return res.status(400).json({ message: "Invalid credentials" });
+      
     }
+
+    if (user.isBlocked) {
+  return res.status(403).json({
+    message: "Your account has been disabled. Contact support.",
+  });
+}
 
     const isMatch = await bcrypt.compare(password, user.password);
 

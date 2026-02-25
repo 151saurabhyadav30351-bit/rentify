@@ -30,6 +30,11 @@ const carSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+
+    isDisabled: {
+  type: Boolean,
+  default: false,
+},
   },
   { timestamps: true }
 );
