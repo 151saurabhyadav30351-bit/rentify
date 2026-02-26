@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import API from "../api";
 import toast from "react-hot-toast";
-import { Camera, Loader2, UserCircle, ShieldCheck } from "lucide-react";
+import { Camera, Loader2, UserCircle, ShieldCheck, Crown } from "lucide-react";
 import { useUser } from "../UserContext";
 
 export default function Profile() {
@@ -12,6 +12,8 @@ export default function Profile() {
   const [saving, setSaving] = useState(false);
   const [memberSince, setMemberSince] = useState("");
   const [isHost, setIsHost] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false); // ⭐ NEW
+
   const { fetchUser } = useUser();
 
   const token = localStorage.getItem("token");
@@ -25,6 +27,7 @@ export default function Profile() {
       setEmail(res.data.email);
       setAvatarUrl(res.data.avatar || "");
       setIsHost(res.data.isHost || false);
+      setIsAdmin(res.data.isAdmin || false); // ⭐ NEW
 
       if (res.data.createdAt) {
         const d = new Date(res.data.createdAt);
@@ -46,43 +49,41 @@ export default function Profile() {
   };
 
   // ================= SAVE =================
- const handleSave = async () => {
-  try {
-    setSaving(true);
+  const handleSave = async () => {
+    try {
+      setSaving(true);
 
-    let avatar = avatarUrl;
+      let avatar = avatarUrl;
 
-    // upload new image if selected
-    if (image) {
-      const form = new FormData();
-      form.append("image", image);
+      // upload new image if selected
+      if (image) {
+        const form = new FormData();
+        form.append("image", image);
 
-      const upload = await API.post("/api/upload", form, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+        const upload = await API.post("/api/upload", form, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
-      avatar = upload.data.url;
-      setAvatarUrl(avatar); // local instant preview
+        avatar = upload.data.url;
+        setAvatarUrl(avatar);
+      }
+
+      await API.put(
+        "/api/users/profile",
+        { name, email, avatar },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      await fetchUser();
+
+      toast.success("Profile updated successfully");
+      setImage(null);
+    } catch {
+      toast.error("Profile update failed");
+    } finally {
+      setSaving(false);
     }
-
-    await API.put(
-      "/api/users/profile",
-      { name, email, avatar },
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-
-    // ⭐⭐⭐ MOST IMPORTANT LINE
-    await fetchUser(); // 🔥 updates Navbar instantly
-
-    toast.success("Profile updated successfully");
-    setImage(null);
-  } catch {
-    toast.error("Profile update failed");
-  } finally {
-    setSaving(false);
-  }
-};
-
+  };
 
   return (
     <div className="p-6 md:p-8">
@@ -104,10 +105,23 @@ export default function Profile() {
           </span>
         )}
 
-        <span className="flex items-center gap-1.5 bg-blue-50 text-blue-700 px-3 py-1 rounded-lg font-medium">
-          <ShieldCheck size={14} />
-          {isHost ? "Host Account" : "User Account"}
-        </span>
+        {/* ⭐⭐⭐ SMART ROLE BADGE (UPGRADED) */}
+        {isAdmin ? (
+          <span className="flex items-center gap-1.5 bg-purple-100 text-purple-700 px-3 py-1 rounded-lg font-medium">
+            <Crown size={14} />
+            Admin Account
+          </span>
+        ) : isHost ? (
+          <span className="flex items-center gap-1.5 bg-amber-100 text-amber-700 px-3 py-1 rounded-lg font-medium">
+            <ShieldCheck size={14} />
+            Verified Host
+          </span>
+        ) : (
+          <span className="flex items-center gap-1.5 bg-blue-50 text-blue-700 px-3 py-1 rounded-lg font-medium">
+            <ShieldCheck size={14} />
+            User Account
+          </span>
+        )}
       </div>
 
       {/* ================= CARD ================= */}
@@ -136,9 +150,7 @@ export default function Profile() {
                 type="file"
                 accept="image/*"
                 className="hidden"
-                onChange={(e) =>
-                  handleImageChange(e.target.files[0])
-                }
+                onChange={(e) => handleImageChange(e.target.files[0])}
               />
             </label>
           </div>
@@ -168,7 +180,7 @@ export default function Profile() {
             />
           </div>
 
-          {/* Email (READ ONLY — premium behavior) */}
+          {/* Email */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Email Address

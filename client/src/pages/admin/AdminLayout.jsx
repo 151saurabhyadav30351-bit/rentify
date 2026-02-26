@@ -4,8 +4,9 @@ import {
   Users,
   Car,
   CalendarCheck,
-  Mail ,
+  Mail,
   LogOut,
+  User, // ⭐ NEW
 } from "lucide-react";
 import { useUser } from "../../UserContext";
 
@@ -25,6 +26,16 @@ export default function AdminLayout() {
         <h2 className="text-2xl font-bold text-blue-900">Admin Panel</h2>
 
         <nav className="space-y-3">
+
+          {/* ⭐ NEW — Admin Profile */}
+          <NavLink
+            to="/admin/profile"
+            className="flex items-center gap-2 text-gray-600 hover:text-blue-900"
+          >
+            <User size={18} /> Profile
+          </NavLink>
+
+          
           <NavLink
             to="/admin"
             end
@@ -32,6 +43,7 @@ export default function AdminLayout() {
           >
             <LayoutDashboard size={18} /> Overview
           </NavLink>
+
 
           <NavLink
             to="/admin/users"

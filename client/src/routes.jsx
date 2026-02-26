@@ -64,6 +64,7 @@ export default function AppRoutes() {
           }
         >
           <Route index element={<AdminOverview />} />
+          <Route path="profile" element={<Profile />} />
           <Route path="users" element={<AdminUsers />} />
           <Route path="cars" element={<AdminCars />} />
           <Route path="bookings" element={<AdminBookings />} />

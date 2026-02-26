@@ -1,135 +1,237 @@
-# 🚗 Rentify — Peer-to-Peer Car Rental Platform
+🚗 Rentify — Peer-to-Peer Car Rental Platform
 
-Rentify is a production-ready full-stack MERN application that enables users to rent cars from local hosts while allowing car owners to earn by listing their vehicles. The platform focuses on real-world booking safety, clean UX, and scalable architecture.
+Rentify is a production-ready full-stack MERN SaaS application that enables users to rent cars from local hosts while allowing vehicle owners to monetize their idle cars.
 
----
+The platform is engineered with real-world booking safety, role-based access control, and scalable architecture, making it suitable for production-grade deployment and portfolio demonstration.
 
-## 🌐 Live Demo
+🌐 Live Demo
 
-* **Frontend:** https://rentify-ashen.vercel.app/
-* **Backend API:** https://rentify-backend-uzth.onrender.com
+Frontend: https://rentify-ashen.vercel.app/
 
-> ⚠️ Note: Backend may take ~20 seconds to wake up on first request (Render free tier).
+⚠️ Note: Backend may take ~20 seconds to wake up on first request (Render free tier cold start).
 
----
+🎯 Project Highlights
 
-## ✨ Key Features
+✅ Production-ready MERN architecture
 
-### 🔐 Authentication & Security
+✅ Smart availability engine (no double bookings)
 
-* JWT-based authentication
-* Protected routes (frontend + backend)
-* Auto session expiry handling
-* Secure password hashing (bcrypt)
+✅ Role-based platform (User / Host / Admin)
 
-### 🚗 Car Management
+✅ Modern SaaS-level UI/UX
 
-* Browse available cars
-* Host onboarding flow
-* Add, edit, delete cars
-* Featured cars section
-* Advanced filtering UI
+✅ Secure authentication & protected routes
 
-### 📅 Smart Booking Engine
+✅ Scalable and modular code structure
 
-* Real-time car booking
-* Overlap prevention logic
-* **Race-condition safe bookings (Mongo transactions)** ⭐
-* Booking cancellation
-* Host booking dashboard
+✨ Core Features
+🔐 Authentication & Security
 
-### 🛡️ Production Hardening
+JWT-based secure authentication
 
-* Backend validation layer
-* Role-ready host system
-* Global Axios interceptor
-* Clean error handling
-* Environment-based configuration
+Protected routes (frontend + backend)
 
----
+Persistent login session handling
 
-## 🧱 Tech Stack
+Secure password hashing with bcrypt
 
-### Frontend
+Axios global interceptor for auth handling
 
-* React (Vite)
-* Tailwind CSS
-* Lucide Icons
-* React Router
-* Axios
+Role-aware navigation rendering
 
-### Backend
+🚗 Car Management System
 
-* Node.js
-* Express.js
-* MongoDB + Mongoose
-* JWT Authentication
-* Cloudinary (image storage)
+Browse and search available cars
 
-### Deployment
+Advanced filtering (city, price, dates)
 
-* Frontend: Vercel
-* Backend: Render
-* Database: MongoDB Atlas
+Host onboarding workflow
 
----
+Add / Edit / Delete car listings
 
-## 🏗️ System Architecture
+Image upload with Cloudinary
 
-User → React Frontend → Express API → MongoDB Atlas
-↘ Cloudinary (image storage)
+Featured cars showcase
 
----
+Admin car moderation
 
-## 🚀 Getting Started (Local Setup)
+📅 Smart Booking Engine (Production-Safe)
 
-### 1️⃣ Clone the repository
+Real-time car availability checking
 
-```bash
+Date overlap prevention logic
+
+MongoDB transaction-safe booking flow ⭐
+
+Double-booking protection
+
+Booking cancellation support
+
+Host booking visibility dashboard
+
+Admin booking monitoring
+
+🛡️ Admin Control Panel
+
+Platform analytics overview
+
+User management
+
+Car listing management
+
+Booking monitoring
+
+Support inbox management
+
+Role-based navbar behavior
+
+Secure admin route protection
+
+💬 Support System
+
+Public contact form
+
+Admin support inbox
+
+Message timestamp tracking
+
+Secure backend validation
+
+🧱 Tech Stack
+🎨 Frontend
+
+React (Vite)
+
+Tailwind CSS (modern responsive UI)
+
+React Router v6
+
+Axios
+
+Lucide React Icons
+
+Context API (state management)
+
+⚙️ Backend
+
+Node.js
+
+Express.js
+
+MongoDB Atlas
+
+Mongoose ODM
+
+JWT Authentication
+
+Bcrypt
+
+Cloudinary (media storage)
+
+☁️ Deployment
+
+Frontend: Vercel
+
+Backend: Render
+
+Database: MongoDB Atlas
+
+Media Storage: Cloudinary
+
+
+🏗️ System Architecture
+User Browser
+     ↓
+React Frontend (Vercel)
+     ↓
+Express API (Render)
+     ↓
+MongoDB Atlas
+     ↘
+      Cloudinary (Image Storage)
+
+
+🚀 Local Development Setup
+1️⃣ Clone the Repository
 git clone https://github.com/151saurabhyadav30351-bit/rentify.git
+
+
 cd rentify
-```
-
-### 2️⃣ Install dependencies
-
-```bash
-# backend
+2️⃣ Install Dependencies
+# Backend
 npm install
 
-# frontend
+# Frontend
 cd client
 npm install
-```
+3️⃣ Environment Variables
 
-### 3️⃣ Configure environment variables
+Create .env files in backend and client.
 
-Create `.env` files in both backend and client with required keys.
+Backend .env (example)
+MONGO_URI=your_mongodb_uri
+JWT_SECRET=your_jwt_secret
+CLOUDINARY_URL=your_cloudinary_url
+Frontend .env
+VITE_API_URL=http://localhost:5000
 
-### 4️⃣ Run the project
-
-```bash
-# backend
+4️⃣ Run the Application
+# Backend
 npm start
 
-# frontend
+# Frontend
 cd client
 npm run dev
-```
+📈 Production Readiness
 
----
+Rentify includes several real-world hardening practices:
 
-## 🔮 Future Enhancements
+Backend validation layer
 
-* ⭐ Reviews & ratings system
-* 💳 Stripe payment integration
-* 🛠️ Admin dashboard
-* 🔔 Email notifications
-* 📱 Mobile app version
+Defensive date conflict checking
 
----
+Role-based access guards
 
-## 👨‍💻 Author
+Clean error boundaries
 
-**Saurabh Yadav**
+Lazy image loading
 
-If you found this project useful, consider giving it a ⭐ on GitHub!
+Skeleton loaders
+
+Mobile-first responsive design
+
+Environment-based configuration
+
+🔮 Future Enhancements
+
+⭐ Reviews & ratings system
+
+💳 Stripe payment integration
+
+🔔 Email & notification system
+
+📱 React Native mobile app
+
+📊 Advanced analytics dashboard
+
+🤖 Smart pricing recommendations
+
+👨‍💻 Author
+
+Saurabh Yadav
+
+MERN Stack Developer
+
+Focused on building production-ready SaaS platforms
+
+Interested in scalable system design & cybersecurity
+
+⭐ Support
+
+If you found this project valuable:
+
+⭐ Star the repository
+
+🍴 Fork the project
+
+📢 Share with others
