@@ -15,14 +15,17 @@ import {
   MapPin,
   ShieldCheck,
 } from "lucide-react";
+
 export default function Home() {
   const navigate = useNavigate();
 
   const [featuredCars, setFeaturedCars] = useState([]);
-
+  const [carsLoading, setCarsLoading] = useState(true); // ⭐ NEW
   const { user } = useUser();
   const isLoggedIn = !!user;
   const isHost = user?.isHost;
+  const isAdmin = user?.isAdmin; // ⭐ NEW (safe addition)
+
   // ✅ existing filters
   const [city, setCity] = useState("");
   const [carType, setCarType] = useState("");
@@ -32,17 +35,26 @@ export default function Home() {
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
 
-  useEffect(() => {
-    API.get("/api/cars").then((res) => {
+ useEffect(() => {
+  const fetchCars = async () => {
+    try {
+      const res = await API.get("/api/cars");
       setFeaturedCars(res.data.map(adaptCar).slice(0, 3));
-    });
-  }, []);
+    } catch (err) {
+      console.error("Featured cars error:", err);
+    } finally {
+      setCarsLoading(false); // ⭐ IMPORTANT
+    }
+  };
+
+  fetchCars();
+}, []);
 
   return (
     <>
       {/* HERO SECTION */}
       <div
-        className="relative overflow-hidden min-h-[90vh] pb-32 md:pb-56"
+        className="relative overflow-hidden min-h-[90vh] pb-24 md:pb-44"
         style={{
           background: `
             linear-gradient(
@@ -100,7 +112,7 @@ export default function Home() {
         </div>
 
         {/* ================= ELITE HERO SEARCH ================= */}
-        <div className="relative md:absolute md:bottom-52 md:left-1/2 md:-translate-x-1/2 w-full px-6 mt-6 md:mt-0 z-20">
+        <div className="relative md:absolute md:bottom-35 md:left-1/2 md:-translate-x-1/2 w-full px-6 mt-6 md:mt-0 z-20">
           <div className="max-w-5xl mx-auto">
 
             <div className="
@@ -222,28 +234,7 @@ export default function Home() {
   </div>
 </div>
 
-        {/* STATS */}
-        <div className="relative md:absolute md:bottom-6 md:left-1/2 md:-translate-x-1/2 w-full px-4 text-white z-10 mt-4 md:mt-0">
-          <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 lg:gap-16 text-center">
-            {[
-              { value: "500+", label: "Cars Available" },
-              { value: "50K+", label: "Happy Customers" },
-              { value: "100+", label: "Cities Covered" },
-            ].map((stat) => (
-              <div
-                key={stat.label}
-                className="bg-white/12 backdrop-blur-sm px-4 sm:px-6 py-3 rounded-lg border border-white/20 shadow-sm"
-              >
-                <div className="text-2xl sm:text-3xl lg:text-4xl font-extrabold">
-                  {stat.value}
-                </div>
-                <div className="text-xs sm:text-sm opacity-85">
-                  {stat.label}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+
       </div>
 
       {/* ===== FEATURED CARS (UNCHANGED) ===== */}
@@ -258,13 +249,36 @@ export default function Home() {
             </p>
           </div>
 
-          <div
-            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-8"
-          >
-            {featuredCars.map((car) => (
-              <CarCard key={car.id} car={car} />
-            ))}
-          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-8">
+  {carsLoading ? (
+    // ⭐ SKELETONS
+    [...Array(3)].map((_, i) => (
+      <div
+        key={i}
+        className="bg-white rounded-2xl border shadow-sm overflow-hidden animate-pulse"
+      >
+        {/* Image skeleton */}
+        <div className="h-48 bg-gray-200 w-full" />
+
+        {/* Content skeleton */}
+        <div className="p-4 space-y-3">
+          <div className="h-4 bg-gray-200 rounded w-3/4" />
+          <div className="h-3 bg-gray-200 rounded w-1/2" />
+          <div className="h-10 bg-gray-200 rounded w-full mt-4" />
+        </div>
+      </div>
+    ))
+  ) : featuredCars.length === 0 ? (
+    // ⭐ EMPTY STATE
+    <div className="col-span-full text-center py-10 text-gray-500">
+      No featured cars available
+    </div>
+  ) : (
+    featuredCars.map((car) => (
+      <CarCard key={car.id} car={car} />
+    ))
+  )}
+</div>
 
           <div className="text-center mt-6 sm:mt-8 lg:mt-10">
             <Link
@@ -449,32 +463,39 @@ export default function Home() {
                 to="/cars"
                 className="bg-white text-blue-900 px-6 sm:px-8 lg:px-10 py-2.5 sm:py-3 rounded-lg sm:rounded-xl font-semibold hover:bg-blue-100 transition flex items-center justify-center gap-2 text-sm sm:text-base"
               >
-                Browse & Book Cars →
+                Browse Cars →
               </Link>
 
               {/* ⭐ SMART CTA */}
-              {!isLoggedIn ? (
-                <Link
-                  to="/auth"
-                  className="bg-white/15 px-6 sm:px-8 lg:px-10 py-2.5 sm:py-3 rounded-lg sm:rounded-xl font-semibold hover:bg-white hover:text-blue-900 transition text-sm sm:text-base"
-                >
-                  Become a Host
-                </Link>
-              ) : !isHost ? (
-                <Link
-                  to="/host"
-                  className="bg-white/15 px-6 sm:px-8 lg:px-10 py-2.5 sm:py-3 rounded-lg sm:rounded-xl font-semibold hover:bg-white hover:text-blue-900 transition text-sm sm:text-base"
-                >
-                  Become a Host
-                </Link>
-              ) : (
-                <Link
-                  to="/dashboard/manage-cars"
-                  className="bg-white/15 px-6 sm:px-8 lg:px-10 py-2.5 sm:py-3 rounded-lg sm:rounded-xl font-semibold hover:bg-white hover:text-blue-900 transition text-sm sm:text-base"
-                >
-                  Manage Your Cars
-                </Link>
-              )}
+{!isLoggedIn ? (
+  <Link
+    to="/auth"
+    className="bg-white/15 px-6 sm:px-8 lg:px-10 py-2.5 sm:py-3 rounded-lg sm:rounded-xl font-semibold hover:bg-white hover:text-blue-900 transition text-sm sm:text-base"
+  >
+    Become a Host
+  </Link>
+) : isAdmin ? (
+  <Link
+    to="/admin"
+    className="bg-white/15 px-6 sm:px-8 lg:px-10 py-2.5 sm:py-3 rounded-lg sm:rounded-xl font-semibold hover:bg-white hover:text-blue-900 transition text-sm sm:text-base"
+  >
+    Go to Admin Panel
+  </Link>
+) : !isHost ? (
+  <Link
+    to="/host"
+    className="bg-white/15 px-6 sm:px-8 lg:px-10 py-2.5 sm:py-3 rounded-lg sm:rounded-xl font-semibold hover:bg-white hover:text-blue-900 transition text-sm sm:text-base"
+  >
+    Become a Host
+  </Link>
+) : (
+  <Link
+    to="/dashboard/manage-cars"
+    className="bg-white/15 px-6 sm:px-8 lg:px-10 py-2.5 sm:py-3 rounded-lg sm:rounded-xl font-semibold hover:bg-white hover:text-blue-900 transition text-sm sm:text-base"
+  >
+    Manage Your Cars
+  </Link>
+)}
 
             </div>
           </div>

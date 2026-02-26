@@ -8,6 +8,9 @@ export default function CarCard({ car }) {
       <img
         src={car.image}
         alt={car.name}
+        loading="lazy"         
+        decoding="async"        
+        fetchpriority="low"     
         className="h-36 sm:h-48 md:h-56 w-full object-cover"
       />
 

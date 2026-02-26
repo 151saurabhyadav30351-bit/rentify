@@ -9,6 +9,13 @@ CREATE BOOKING
 */
 export const createBooking = async (req, res) => {
   try {
+    // 🔴 NEW — ADMIN CANNOT BOOK (SECURITY LAYER)
+    if (req.user?.isAdmin) {
+      return res.status(403).json({
+        message: "Admins are not allowed to make bookings",
+      });
+    }
+
     const {
       carId,
       fromDate,
@@ -42,7 +49,7 @@ export const createBooking = async (req, res) => {
       });
     }
 
-    // 🔴 CRITICAL FIX — prevent booking disabled car
+    // 🔴 CRITICAL FIX — prevent booking unavailable car
     if (!car.isAvailable) {
       return res.status(400).json({
         message: "This car is currently unavailable",

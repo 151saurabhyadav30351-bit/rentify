@@ -28,6 +28,17 @@ export default function CarDetails() {
 
   const token = localStorage.getItem("token");
 
+  // ⭐ NEW — detect admin safely (no backend change)
+  let isAdmin = false;
+  try {
+    if (token) {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      isAdmin = payload?.isAdmin || false;
+    }
+  } catch {
+    isAdmin = false;
+  }
+
   // ================= FETCH CAR =================
   useEffect(() => {
     API.get(`/api/cars/${id}`).then((res) => {
@@ -95,13 +106,19 @@ export default function CarDetails() {
   if (!car) return <CarDetailsSkeleton />;
 
   // =====================================================
-  // ⭐⭐ PROFESSIONAL BOOK HANDLER (MAIN FIX)
+  // ⭐⭐ PROFESSIONAL BOOK HANDLER (ADMIN SAFE)
   // =====================================================
   const handleBooking = async () => {
     // 🚨 NOT LOGGED IN
     if (!token) {
       toast.error("Please login to continue booking");
       navigate("/auth");
+      return;
+    }
+
+    // 🔴 NEW — ADMIN BLOCK (frontend UX guard)
+    if (isAdmin) {
+      toast.error("Admin accounts cannot book cars");
       return;
     }
 
@@ -161,7 +178,9 @@ export default function CarDetails() {
           </div>
 
           <div className="mt-6 sm:mt-8">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">{car.name}</h1>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">
+              {car.name}
+            </h1>
 
             <div className="flex items-center gap-2 text-gray-500 mt-2 text-sm sm:text-base md:text-lg">
               <MapPin size={16} className="sm:w-5 sm:h-5" />
@@ -228,13 +247,17 @@ export default function CarDetails() {
                 </div>
               )}
 
-              {/* ⭐ BUTTON FIXED */}
+              {/* ⭐ ADMIN SAFE BUTTON */}
               <button
-                disabled={!isValidRange || isChecking}
+                disabled={!isValidRange || isChecking || isAdmin}
                 onClick={handleBooking}
                 className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white py-2.5 sm:py-3.5 rounded-lg sm:rounded-xl font-semibold text-sm sm:text-base transition disabled:opacity-50"
               >
-                {isChecking ? "Booking your ride..." : "Book Now"}
+                {isAdmin
+                  ? "Admins cannot book"
+                  : isChecking
+                  ? "Booking your ride..."
+                  : "Book Now"}
               </button>
 
               <p className="text-xs text-center text-gray-400">
