@@ -153,7 +153,122 @@ export default function Navbar() {
           </button>
         </div>
       </div>
+            {/* Mobile Menu */}
+<div
+  className={`fixed inset-0 z-[90] md:hidden transition-all duration-300 ${
+    isMenuOpen ? "block pointer-events-auto" : "hidden pointer-events-none"
+  }`}
+>
+  {/* Backdrop */}
+  <div
+    onClick={() => setIsMenuOpen(false)}
+    className={`absolute inset-0 transition-opacity duration-300 ${
+      isMenuOpen ? "opacity-100" : "opacity-0"
+    }`}
+    style={{
+      backgroundColor: isMenuOpen ? "rgba(0,0,0,0.6)" : "transparent",
+    }}
+  />
 
+  {/* Drawer */}
+  <div
+    className={`absolute top-0 right-0 z-[1000] w-64 sm:w-72 transform transition-transform duration-300`}
+    style={{
+      transform: isMenuOpen ? "translateX(0)" : "translateX(100%)",
+      opacity: isMenuOpen ? 1 : 0,
+      visibility: isMenuOpen ? "visible" : "hidden",
+      backgroundColor: "#ffffff",
+      minHeight: "100vh",
+      boxShadow: "0 10px 30px rgba(2,6,23,0.12)",
+    }}
+  >
+    <div className="p-4 sm:p-6 space-y-6">
+      {/* Header */}
+      <div className="flex justify-between items-center bg-white pb-3 border-b border-gray-100">
+        <h2 className="font-semibold text-blue-900 text-base sm:text-lg">
+          Menu
+        </h2>
+        <button onClick={() => setIsMenuOpen(false)} className="p-1">
+          <X size={20} />
+        </button>
+      </div>
+
+      {/* Links */}
+      <div className="space-y-3 sm:space-y-4">
+        {navLinks.map((link) => (
+          <Link
+            key={link.path}
+            to={link.path}
+            onClick={() => setIsMenuOpen(false)}
+            className={`block text-sm sm:text-base ${
+              isActive(link.path)
+                ? "text-blue-900 font-semibold"
+                : "text-gray-600"
+            }`}
+          >
+            {link.label}
+          </Link>
+        ))}
+
+        {/* My Rides — hide for admin */}
+        {isLoggedIn && !isAdmin && (
+          <Link
+            to="/dashboard/bookings"
+            onClick={() => setIsMenuOpen(false)}
+            className="block text-gray-600 text-sm sm:text-base"
+          >
+            My Rides
+          </Link>
+        )}
+
+        {/* Become Host — hide for admin */}
+        {isLoggedIn && !isHost && !isAdmin && (
+          <Link
+            to="/host"
+            onClick={() => setIsMenuOpen(false)}
+            className="block border border-blue-900 text-blue-900 px-4 py-2 rounded-lg text-center text-sm sm:text-base font-medium"
+          >
+            Become a Host
+          </Link>
+        )}
+
+        {!isLoggedIn && (
+          <Link
+            to="/auth"
+            onClick={() => setIsMenuOpen(false)}
+            className="block bg-blue-900 text-white px-4 py-2 rounded-lg text-center text-sm sm:text-base font-medium"
+          >
+            Get Started
+          </Link>
+        )}
+
+        {isLoggedIn && (
+          <button
+            onClick={() => {
+              navigate(isAdmin ? "/admin" : "/dashboard/profile");
+              setIsMenuOpen(false);
+            }}
+            className="block w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 text-sm sm:text-base"
+          >
+            <img
+              src={
+                avatar ||
+                `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                  userName || "User"
+                )}`
+              }
+              alt="avatar"
+              className="w-8 h-8 rounded-full object-cover"
+            />
+            <span className="font-medium text-gray-700">
+              {userName || "User"}
+            </span>
+          </button>
+        )}
+      </div>
+    </div>
+  </div>
+</div>
       {/* MOBILE MENU — UNCHANGED */}
       {/* (your mobile code remains exactly the same) */}
     </nav>
