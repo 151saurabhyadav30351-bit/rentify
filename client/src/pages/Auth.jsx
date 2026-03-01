@@ -91,9 +91,14 @@ export default function Auth() {
           navigate("/");
         }
       }
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Something went wrong");
-    } finally {
+    } catch (error) {
+  const msg =
+    error?.response?.data?.message ||
+    error?.response?.data?.error ||
+    "Something went wrong";
+
+  toast.error(msg);
+} finally {
       setLoading(false);
     }
   };
